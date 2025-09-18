@@ -1,0 +1,37 @@
+import math
+
+# Constants
+c = 299_792_458         # Speed of light (m/s)
+G = 6.67430e-11         # Gravitational constant (m³/kg·s²)
+
+# --- Special Relativity ---
+def gamma(v):
+    """Lorentz factor γ"""
+    if abs(v) >= c:
+        raise ValueError("Speed must be less than c")
+    return 1 / math.sqrt(1 - (v/c)**2)
+
+def time_dilation_sr(t0, v):
+    """Time dilation in special relativity: t = γ t0"""
+    γ = gamma(v)
+    return γ * t0
+
+def length_contraction(L0, v):
+    """Length contraction in special relativity: L = L0 / γ"""
+    γ = gamma(v)
+    return L0 / γ
+
+# --- Main Program ---
+
+        t0 = float(input("Enter your proper time t0 (s): "))
+        v = float(input("Enter your relative speed v (m/s): "))
+        L0 = float(input("Enter proper length L0 (m) to compute contraction: "))
+
+        t = time_dilation_sr(t0, v)
+        L = length_contraction(L0, v)
+        γ = gamma(v)
+
+        print(f"\n--- Special Relativity Results ---")
+        print(f"Lorentz factor: γ = {γ:.6f}")
+        print(f"Time dilation: t = {t:.9f} s (for t0 = {t0} s)")
+        print(f"Length contraction: L = {L:.9f} m (for L0 = {L0} m)")
