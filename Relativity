@@ -4,7 +4,8 @@ import math
 c = 299_792_458         # Speed of light (m/s)
 G = 6.67430e-11         # Gravitational constant (m³/kg·s²)
 
-# --- Special Relativity ---
+# -- Special Relativity --
+
 def gamma(v):
     """Lorentz factor γ"""
     if abs(v) >= c:
@@ -21,8 +22,27 @@ def length_contraction(L0, v):
     γ = gamma(v)
     return L0 / γ
 
-# --- Main Program ---
+# -- General Relativity --
 
+def time_dilation_gr(t0, M, r):
+    """Time dilation in general relativity: t = t0 / sqrt(1 - rs/r)"""
+    rs = 2 * G * M / c**2  # Schwarzschild radius
+    if r <= rs:
+        raise ValueError("r must be larger than Schwarzschild radius")
+    factor = math.sqrt(1 - rs/r)
+    t = t0 / factor
+    slowing_factor = t0 / t
+    return t, slowing_factor
+
+# -- Main Program --
+
+def main():
+    print("Time Dilation Calculator")
+    print("1) Special Relativity (velocity-based)")
+    print("2) General Relativity (gravity-based)")
+    choice = input("Choose option (1/2): ")
+
+    if choice == "1":
         t0 = float(input("Enter your proper time t0 (s): "))
         v = float(input("Enter your relative speed v (m/s): "))
         L0 = float(input("Enter proper length L0 (m) to compute contraction: "))
@@ -35,3 +55,17 @@ def length_contraction(L0, v):
         print(f"Lorentz factor: γ = {γ:.6f}")
         print(f"Time dilation: t = {t:.9f} s (for t0 = {t0} s)")
         print(f"Length contraction: L = {L:.9f} m (for L0 = {L0} m)")
+
+    elif choice == "2":
+        t0 = float(input("Enter your proper time t0 near the mass (s): "))
+        M = float(input("Enter mass of the object M (kg): "))
+        r = float(input("Enter distance from mass center r (m): "))
+
+        t, factor = time_dilation_gr(t0, M, r)
+
+        print(f"\n--- General Relativity Results ---")
+        print(f"Time dilation: t = {t:.9f} s (for t0 = {t0} s)")
+        print(f"Clock near mass runs slower by factor: {factor:.9f}")
+
+    else:
+        print("Invalid choice.")
